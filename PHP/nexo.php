@@ -1,6 +1,6 @@
 <?php 
 
-include "clases/Personas.php";
+include "clases/productos.php";
 include "clases/Usuarios.php";
 // $_GET['accion'];
 
@@ -19,9 +19,9 @@ if ( !empty( $_FILES ) ) {
 	if($accion=="traer")
 	{
 		$respuesta= array();
-		//$respuesta['listado']=Persona::TraerPersonasTest();
-		$respuesta['listado']=Persona::TraerTodasLasPersonas();
-		//var_dump(Persona::TraerTodasLasPersonas());
+		//$respuesta['listado']=producto::TraerproductosTest();
+		$respuesta['listado']=producto::TraerTodosLosProductos();
+		//var_dump(producto::TraerTodasLasproductos());
 		$arrayJson = json_encode($respuesta);
 		echo  $arrayJson;
 	}
@@ -40,41 +40,41 @@ else{
 		switch($respuesta->datos->accion)
 		{
 			case "borrar":	
-				if($respuesta->datos->persona->foto!="pordefecto.png")
+				if($respuesta->datos->producto->foto!="pordefecto.png")
 				{
-					unlink("../fotos/".$respuesta->datos->persona->foto);
+					unlink("../fotos/".$respuesta->datos->producto->foto);
 				}
-				Persona::BorrarPersona($respuesta->datos->persona->id);
+				producto::BorrarProducto($respuesta->datos->producto->id);
 			break;
 
 			case "insertar":	
-				if($respuesta->datos->persona->foto!="pordefecto.png")
+				if($respuesta->datos->producto->foto!="pordefecto.png")
 				{
-					$rutaVieja="../fotos/".$respuesta->datos->persona->foto;
-					$rutaNueva=$respuesta->datos->persona->dni.".".PATHINFO($rutaVieja, PATHINFO_EXTENSION);
+					$rutaVieja="../fotos/".$respuesta->datos->producto->foto;
+					$rutaNueva=$respuesta->datos->producto->dni.".".PATHINFO($rutaVieja, PATHINFO_EXTENSION);
 					copy($rutaVieja, "../fotos/".$rutaNueva);
 					unlink($rutaVieja);
-					$respuesta->datos->persona->foto=$rutaNueva;
+					$respuesta->datos->producto->foto=$rutaNueva;
 				}
-				Persona::InsertarPersona($respuesta->datos->persona);
+				Producto::Insertarproducto($respuesta->datos->producto);
 			break;
 
 			case "buscar":
 			
-				echo json_encode(Persona::TraerUnaPersona($respuesta->datos->id));
+				echo json_encode(Producto::TraerUnProducto($respuesta->datos->id));
 				break;
 	
 			case "modificar":
 			
-				if($respuesta->datos->persona->foto!="pordefecto.png")
+				if($respuesta->datos->producto->foto!="pordefecto.png")
 				{
-					$rutaVieja="../fotos/".$respuesta->datos->persona->foto;
-					$rutaNueva=$respuesta->datos->persona->dni.".".PATHINFO($rutaVieja, PATHINFO_EXTENSION);
+					$rutaVieja="../fotos/".$respuesta->datos->producto->foto;
+					$rutaNueva=$respuesta->datos->producto->dni.".".PATHINFO($rutaVieja, PATHINFO_EXTENSION);
 					copy($rutaVieja, "../fotos/".$rutaNueva);
 					unlink($rutaVieja);
-					$respuesta->datos->persona->foto=$rutaNueva;
+					$respuesta->datos->producto->foto=$rutaNueva;
 				}
-				Persona::ModificarPersona($respuesta->datos->persona);
+				producto::Modificarproducto($respuesta->datos->producto);
 				break;
 		}//switch($respuesta->datos->accion)
 	}//if(isset($respuesta->datos->accion)){
