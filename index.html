@@ -1,41 +1,49 @@
 <html>
 <head>
-	<title>ABM angular PHP</title>
-	  
-		<!--?php require_once"partes/referencias.php" ;/**/?-->
+	<title>Pizzeria</title>
 		
 
       <!--script type="text/javascript" src="./bower_components/jquery/dist/jquery.js"></script-->
-       	<meta charset="UTF-8">
+   	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" href="http://www.octavio.com.ar/favicon.ico">
+	<link rel="icon" href="fotos/PerfCenterCpl.ico">
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/estilo.css">
 	<link rel="stylesheet" type="text/css" href="css/animacion.css">
-	<!--final de Estilos-->    
+	<!-- final de Estilos-->
+ 	<script src="bower_components/angular/angular.min.js"></script><!--  -->  
+  	<script src="bower_components/angular-animate/angular-animate.js"></script> <!--  -->   
+  	<!--<script src="http://caitp.github.io/ng-media/ng-media.js"></script> <!-- video --> 
+  	<script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script><!-- Estados -->    
+  	<script src="bower_components/angular-file-upload/dist/angular-file-upload.min.js">
+  	</script><!-- manejo de archivos -->  
+  	
+  	<script src="bower_components/satellizer/satellizer.min.js"></script><!-- Autentificación - Auth -->  
+ 	<script SRC="js/app.js" TYPE="text/javascript"></script><!-- app -->  
+ 	<script type="text/javascript" src="js/directivas/ngThumb.js"></script><!-- Directiva para subir un archivo  -->  
+ 	 <script type="text/javascript" src="js/directivas/miDirectiva.js"></script><!-- My directiva--> 
 
-
- 	<script src="bower_components/angular/angular.min.js"></script>
-  	<script src="bower_components/angular-animate/angular-animate.js"></script>
-  	<script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-  	<script src="bower_components/angular-file-upload/dist/angular-file-upload.min.js"></script>
- 	<script SRC="js/app.js" TYPE="text/javascript"></script>
- 	<script type="text/javascript" src="js/directivas/ngThumb.js"></script>
- 	<style type="text/css">
 	
 </head>
 <body ng-app="ABMangularPHP" 
-
- 
-	<div ui-view="menuSuperior">
-		
-	
-          
+	<!--?php		
+		require_once"partes/barraDeMenu.php";
+	 ?-->
+  
+	<div class="brand" ui-view="menuSuperior">  
 	</div><!--del view menuSuperior-->
 
-
-	<div ui-view="principal">
-		
+	<div ui-view="principal">	
 	</div><!--del view-->
+
+	<footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <p>Copyright &copy; Germán Molina 2016</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

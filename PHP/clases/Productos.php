@@ -99,13 +99,13 @@ class Producto
 	{
 		$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
 		//$consulta =$objetoAccesoDato->RetornarConsulta("select * from producto");
-		$consulta =$objetoAccesoDato->RetornarConsulta("CALL TraerTodasLosProductos() ");
+		$consulta =$objetoAccesoDato->RetornarConsulta("CALL TraerTodosLosProductos() ");
 		$consulta->execute();			
 		$arrproductos= $consulta->fetchAll(PDO::FETCH_CLASS, "Producto");	
 		return $arrproductos;
 	}
 	
-	public static function Borrarproducto($idParametro)
+	public static function BorrarProducto($idParametro)
 	{	
 		$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
 		//$consulta =$objetoAccesoDato->RetornarConsulta("delete from producto	WHERE id=:id");	
@@ -129,7 +129,7 @@ class Producto
 			$consulta =$objetoAccesoDato->RetornarConsulta("CALL ModificarProducto(:pid,:pmarca,:pprecio,:pstock,:ptipo:pfoto)");
 			$consulta->bindValue(':pid',$producto->id, PDO::PARAM_INT);
 			$consulta->bindValue(':pmarca', $producto->marca, PDO::PARAM_STR);
-			$consulta->bindValue(':pprecio', $producto->marca, PDO::PARAM_STR);
+			$consulta->bindValue(':pprecio', $producto->precio, PDO::PARAM_STR);
 			$consulta->bindValue(':pstock', $producto->stock, PDO::PARAM_INT);
 			$consulta->bindValue(':ptipo',$producto->tipo, PDO::PARAM_STR);
 			$consulta->bindValue(':pfoto', $producto->foto, PDO::PARAM_STR);
@@ -146,7 +146,7 @@ class Producto
 		//$consulta =$objetoAccesoDato->RetornarConsulta("INSERT into producto (tipo,marca,precio,foto)values(:tipo,:marca,:precio,:foto)");
 		$consulta =$objetoAccesoDato->RetornarConsulta("CALL InsertarProducto (:pmarca,:pprecio,:pstock,:ptipo,:foto)");
 			$consulta->bindValue(':pmarca', $producto->marca, PDO::PARAM_STR);
-			$consulta->bindValue(':pprecio', $producto->marca, PDO::PARAM_STR);
+			$consulta->bindValue(':pprecio', $producto->precio, PDO::PARAM_STR);
 			$consulta->bindValue(':pstock', $producto->stock, PDO::PARAM_INT);
 			$consulta->bindValue(':ptipo',$producto->tipo, PDO::PARAM_STR);
 			$consulta->bindValue(':pfoto', $producto->foto, PDO::PARAM_STR);
