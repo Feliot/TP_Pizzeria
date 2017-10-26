@@ -1,20 +1,24 @@
-      <ul class="nav nav-tabs">
-		         <li  class="btn btn-info animated bounceInLeft" >
-		         	<a ui-sref="menu">
+ <div ng-app="ABMangularPHP" ng-controller="controlMenuSup"> 
+    	<div class= "MjeUsuario"> {{MensajePrincipal}} </div>
+      <ul class="nav-tabs">
+		         <li  class="btn btn-info  animated bounceInLeft" >
+		         	<a ui-sref="menu" class="menuPrincipal" >
 		         		 <span class="glyphicon glyphicon-list-alt">&nbsp;</span>
 		         		 Inicio 
 		         	</a>
 		         </li>
 		         <li class="btn btn-info animated bounceInLeft" >
-		         	<a ui-sref="alta">
+		         	<a ui-sref="alta" class="menuPrincipal">
 		         		<span class="glyphicon glyphicon-plus-sign">&nbsp;</span>
 		         		Alta
 		         	</a>
 		         </li>
 		         <li  class="btn btn-info animated bounceInLeft" >
-		         	<a ui-sref="grilla"> 
+		         	<a ui-sref="grilla" class="menuPrincipal"> 
 		         		<span class="glyphicon glyphicon-th" >&nbsp;</span>
 		         			Grilla</a>
 		         		</li>
-		        	<span id="tituloBarra"  class="animated bounceInRight">{{DatoTest}} TP - Pizzeria Versión 1.1 &nbsp;&nbsp;&nbsp;</span>
+		        	<span id="tituloBarra"  class="animated bounceInRight">
+		        		TP - Pizzeria Versión 1.1 &nbsp;&nbsp;&nbsp;</span>
       </ul>
+  </div>

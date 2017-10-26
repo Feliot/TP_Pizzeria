@@ -37,7 +37,7 @@ if($idUsuario==false)
 				  );
 	 $token = Firebase\JWT\JWT::encode($token, 'mytoken2016');
 	 // token ya terminado
-	$array['tokenTest2016'] = $token;
+	$array['token2016'] = $token;
 	 echo json_encode($array);
  }	
  else 

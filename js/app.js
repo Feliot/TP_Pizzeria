@@ -1,11 +1,7 @@
 
 var app = angular.module('ABMangularPHP', ['ngAnimate','ui.router','angularFileUpload','satellizer'])
-
-
-
 .config(function($stateProvider, $urlRouterProvider,$authProvider) {
-
-  
+ 
   $authProvider.loginUrl = 'TP_Pizzeria/PHP/clases/autentificador.php';
   $authProvider.signupUrl = 'TP_Pizzeria/PHP/clases/autentificador.php';
   $authProvider.tokenName = 'mytoken2016';
@@ -13,69 +9,82 @@ var app = angular.module('ABMangularPHP', ['ngAnimate','ui.router','angularFileU
   $authProvider.authHeader = 'Data';
 
   $stateProvider
-
-.state('menu', {
-    views: {
-      'principal': { templateUrl: 'template/menu.html',controller: 'controlMenu' },
-      'menuSuperior': {templateUrl: 'template/menuSuperior.html'}
-    }
-    ,url:'/menu'
-  })
-.state('login', {
-   views: {
-      'principal': { templateUrl: 'template/templateLoguin.html',controller: 'controlLoguin' },
-      'menuSuperior': {templateUrl: 'template/menuSuperior.html'}
-    }, url: '/login'
+    .state('menu', {
+      views: {
+        'principal': { templateUrl: 'template/menu.html',controller: 'controlMenu' },
+        'menuSuperior': {templateUrl: 'template/menuSuperior.html'}
+      }
+      ,url:'/menu'
     })
-///{nombre}?:password
-.state('grilla', {
-    url: '/grilla',
-    views: {
-      'principal': { templateUrl: 'template/templateGrilla.html',controller: 'controlGrilla' },
-      'menuSuperior': {templateUrl: 'template/menuSuperior.html'}
-    }
-  })
-.state('grillaFiltro', {
-    url: '/grillaFiltro',
-    views: {
-      'principal': { templateUrl: 'template/templateGrillaFiltro.html',controller: 'controlGrillaFiltro'} ,
-      'menuSuperior': {templateUrl: 'template/menuSuperior.html'} }    
-  })
-.state('alta', {
-    url: '/alta',
-    views: {
-      'principal': { templateUrl: 'template/templateUsuario.html',controller: 'controlAlta' },
-      'menuSuperior': {templateUrl: 'template/menuSuperior.html'}
-    }
-  })
-  .state('modificar', {
-    url: '/modificar/{id}?:nombre:apellido:dni:foto',
-     views: {
-      'principal': { templateUrl: 'template/templateUsuario.html',controller: 'controlModificacion' },
-      'menuSuperior': {templateUrl: 'template/menuSuperior.html'}
-    }
-  })
-  .state("logout", {
-                 views: {
-      'principal': { templateUrl: 'template/templateLoguin.html',controller: 'controlLogout' },
-      'menuSuperior': {templateUrl: 'template/menuSuperior.html'}
-                },
-                url: "/logout"
-            })
-
+    .state('login', {
+       views: {
+          'principal': { templateUrl: 'template/templateLoguin.html',controller: 'controlLoguin' },
+          'menuSuperior': {templateUrl: 'template/menuSuperior.html'}
+        }, url: '/login'
+        })
+    ///{nombre}?:password
+    .state('grilla', {
+        url: '/grilla',
+        views: {
+          'principal': { templateUrl: 'template/templateGrilla.html',controller: 'controlGrilla' },
+          'menuSuperior': {templateUrl: 'template/menuSuperior.html'}
+        }
+      })
+    .state('grillaFiltro', {
+        url: '/grillaFiltro',
+        views: {
+          'principal': { templateUrl: 'template/templateGrillaFiltro.html',controller: 'controlGrillaFiltro'} ,
+          'menuSuperior': {templateUrl: 'template/menuSuperior.html'} }    
+      })
+    .state('alta', {
+        url: '/alta',
+        views: {
+          'principal': { templateUrl: 'template/templateUsuario.html',controller: 'controlAlta' },
+          'menuSuperior': {templateUrl: 'template/menuSuperior.html'}
+        }
+      })
+      .state('modificar', {
+        url: '/modificar/{id}?:nombre:apellido:dni:foto',
+         views: {
+          'principal': { templateUrl: 'template/templateUsuario.html',controller: 'controlModificacion' },
+          'menuSuperior': {templateUrl: 'template/menuSuperior.html'}
+        }
+      })
+      .state("logout", {
+                     views: {
+          'principal': { templateUrl: 'template/templateLoguin.html',controller: 'controlLogout' },
+          'menuSuperior': {templateUrl: 'template/menuSuperior.html'}
+                    },
+                    url: "/logout"
+                })
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login'); //cuando se haga el login feemplazar /menu por /login
-});
 
+});//fin config
 
-app.controller('controlLoguin', function($scope, $http, $auth, $state, $stateParams) {
+app.controller('controlMenuSup', function($scope, $http, $auth, $state, $stateParams, servicioMjePrincipal) {
+      if(servicioMjePrincipal.mensaje!= null)
+      {
+        $scope.MensajePrincipal = servicioMjePrincipal.mensaje;
+        console.log($scope.MensajePrincipal);
+      }    
+else{
+
+      console.log(servicioMjePrincipal.mensaje);
+   };//fin else
+    
+    
+});//fin del controlMenuSup
+app.controller('controlLoguin', function($scope, $http, $auth, $state, $stateParams, servicioMjePrincipal) {
   
   // var mail = $stateParams.mail;
    // var nombre = $stateParams.nombre;
    // var pass = $stateParams.password;
-
+ 
+   
+    
+  
    $scope.logear=function(pass , nombre) {
-
      console.info("respuesta del loguin1", pass , nombre);
       $auth.login({usuario:nombre,clave:pass})
       .then(function(respuestadeauth){
@@ -83,10 +92,13 @@ app.controller('controlLoguin', function($scope, $http, $auth, $state, $statePar
       console.info("respuesta del loguinasda",$auth.isAuthenticated());
       if($auth.isAuthenticated())
       {
+        servicioMjePrincipal.CargarMje("Bienvenido "+nombre);
+        console.log($auth.getToken());
         $state.go('menu');
       }
       else
         {
+          servicioMjePrincipal.CargarMje("Está desconectado.");
           $state.go('login');  
         }
       //  console.info("datos auth en menu", $auth.isAuthenticated(),$auth.getPayload());
@@ -94,15 +106,17 @@ app.controller('controlLoguin', function($scope, $http, $auth, $state, $statePar
       console.info("ERROR", parametro);
    });//fin catch
   };//fin logear
-});//fin del  controlLoguin
 
-app.controller('controlLogout',function($scope, $http, $auth, $location){
+});//fin del controlLoguin
+
+app.controller('controlLogout',function($scope, $http, $auth, $location, servicioMjePrincipal){
   console.log("Deslogueo mytoken2016");
   $auth.logout()
         .then(function() {
             // Desconectamos al usuario y lo redirijimos
             console.log("Deslogueo mytoken2016");
-           $window.localStorage.removeItem('mytoken2016');
+           localStorage.removeItem('mytoken2016');
+           servicioMjePrincipal.CargarMje("Está desconectado.");
            $location.path("/Loguin") 
         },function errorCallback(response) {        
           //aca se ejecuta cuando hay errores
@@ -112,122 +126,104 @@ app.controller('controlLogout',function($scope, $http, $auth, $location){
 
 app.controller('controlMenu', function($scope, $http, $auth, $state) {
   $scope.DatoTest="test";
-$scope.DatoInicio="Cargame";
- if(!$auth.isAuthenticated())
-      {
-        console.log("Validacion en Menu INCORRECTA");
-        $state.go('login');
-      }
-else{
-  }//Fin else
- /*if($auth.isAuthenticated())
-  {
-    $state.go('alta');
-  }
-  else
+  $scope.DatoInicio="Cargame";
+  if(!$auth.isAuthenticated())
+        {
+          console.log("Validacion en Menu INCORRECTA");
+          $state.go('login');
+        }
+  else{
+   //Fin else
+   /*if($auth.isAuthenticated())
     {
-      $state.go('menu');
+      $state.go('alta');
     }
-
-  $auth.login({usuario:"pepito",clave:"666"});
-  $scope.DatoTest="**Menu**";
-  console.info("datos auth en menu", $auth.isAuthenticated(),$auth.getPayload());*/
-});
-
-
+    else
+      {
+        $state.go('menu');
+      }
+    $auth.login({usuario:"pepito",clave:"666"});
+    $scope.DatoTest="**Menu**";
+    console.info("datos auth en menu", $auth.isAuthenticated(),$auth.getPayload());*/
+     }
+});//fin controlMenu
 
 app.controller('controlAlta', function($scope, $http ,$state,$auth,FileUploader,cargadoDeFoto,servicioMjePost) {
     $scope.uploader = new FileUploader({url: 'PHP/nexo.php'});
-  $scope.uploader.queueLimit = 1;// aparentemente esto tiene que estar antes de la validacion sino tira error.
-   if(!$auth.isAuthenticated())
+    $scope.uploader.queueLimit = 1;// aparentemente esto tiene que estar antes de la validacion sino tira error.
+    if(!$auth.isAuthenticated())
       {
        console.log("Validacion en ALTA INCORRECTA");
         $state.go('login');
       }
-  else
+    else
       {
-  $scope.DatoTest="**alta**";
-//inicio las variables
+      $scope.DatoTest="**alta**";
+      //inicio las variables
 
-  $scope.persona={};
-  $scope.persona.nombre= "natalia" ;
-  $scope.persona.dni= "12312312" ;
-  $scope.persona.apellido= "natalia" ;
-  $scope.persona.foto="pordefecto.png";
-  
-  cargadoDeFoto.CargarFoto($scope.persona.foto,$scope.uploader);
+      $scope.producto={};
+      $scope.producto.nombre= "natalia" ;
+      $scope.producto.dni= "12312312" ;
+      $scope.producto.apellido= "natalia" ;
+      $scope.producto.foto="pordefecto.png";
+      cargadoDeFoto.CargarFoto($scope.producto.foto,$scope.uploader);
  
- 
- $scope.Mje=function(){
-
-  servicioMjePost.retornarMje.then(function(carga){
-  $scope.MyMje=  carga;
-});
-  }
-
-  $scope.Guardar=function(){
-  console.log($scope.uploader.queue);
-  if($scope.uploader.queue[0].file.name!='pordefecto.png')
-  {
-    var nombreFoto = $scope.uploader.queue[0]._file.name;
-    $scope.persona.foto=nombreFoto;
-  }
-  $scope.uploader.uploadAll();
-    console.log("persona a guardar:");
-    console.log($scope.persona);
-  }
-   $scope.uploader.onSuccessItem=function(item, response, status, headers)
-  {
-    //alert($scope.persona.foto);
-      $http.post('PHP/nexo.php', { datos: {accion :"insertar",persona:$scope.persona}})
-        .then(function(respuesta) {       
-           //aca se ejetuca si retorno sin errores        
-         console.log(respuesta.data);
-         $state.go("grilla");
-
-      },function errorCallback(response) {        
-          //aca se ejecuta cuando hay errores
-          console.log( response);           
-        });
-    console.info("Ya guardé el archivo.", item, response, status, headers);
-  };
-}//fin del else
- });
-
-
-app.controller('controlGrilla', function($scope, $http,$location,$state,$auth,factoryProducto) {
-  	$scope.DatoTest="**grilla**";
- if(!$auth.isAuthenticated())
+      $scope.Mje=function()
       {
-        console.log("Validacion en GRILLA INCORRECTA");
-        $state.go('login');
+
+        servicioMjePost.retornarMje.then(function(carga)
+        {
+          $scope.MyMje=  carga;
+          }); //fin then
+        }//fin mje
+
+      $scope.Guardar=function(){
+      console.log($scope.uploader.queue);
+      if($scope.uploader.queue[0].file.name!='pordefecto.png')
+      {
+        var nombreFoto = $scope.uploader.queue[0]._file.name;
+        $scope.producto.foto=nombreFoto;
       }
-else{
-console.log(factoryProducto.nombre);
-//factoryPersona.mostrarNombre("Molina");
- factoryProducto.TraerListado().then(function(carga){
-  $scope.ListadoProductos=  carga;
-});
-console.log(factoryProducto.nombre);
-$scope.guardar = function(producto){
-console.log( JSON.stringify(producto));
-}
- // $http.get('PHP/nexo.php', { params: {accion :"traer"}})
-  /*$http.get('http://localhost:8080/Angular_PHP_ABM_Persona-ngrepeat/Datos/Persona')// el nombre completro de la pagina
-  
-  .then(function(respuesta) {       
+      $scope.uploader.uploadAll();
+        console.log("producto a guardar:");
+        console.log($scope.producto);
+      }
+       $scope.uploader.onSuccessItem=function(item, response, status, headers)
+      {
+        //alert($scope.producto.foto);
+          $http.post('PHP/nexo.php', { datos: {accion :"insertar",producto:$scope.producto}})
+            .then(function(respuesta) {       
+               //aca se ejetuca si retorno sin errores        
+             console.log(respuesta.data);
+             $state.go("grilla");
 
-         $scope.ListadoPersonas = respuesta.data;
-         console.log(respuesta.data);
+          },function errorCallback(response) {        
+              //aca se ejecuta cuando hay errores
+              console.log( response);           
+            });
+        console.info("Ya guardé el archivo.", item, response, status, headers);
+      }; // fin onSuccessItem
+      }//fin del else
+ });// fin control del Alta
 
-    },function errorCallback(response) {
+app.controller('controlGrilla', function($scope, $http,$location,$state,$auth,factoryProducto){
+    $scope.DatoTest="**grilla**";
+     if(!$auth.isAuthenticated())
+          {
+            console.log("Validacion en GRILLA INCORRECTA");
+            $state.go('login');
+          }
+    else{
+    //factoryPersona.mostrarNombre("Molina");
+     factoryProducto.TraerListado().then(function(carga){
+      $scope.ListadoProductos=  carga;
+    });
+    $scope.guardar = function(producto){
+    console.log( JSON.stringify(producto));
+    }
 
-  $state.go("modificar, {persona:" + JSON.stringify(persona)  + "}");
-     		 $scope.ListadoPersonas= [];
-     		console.log( response);     
- 	 });*/
    } //fin del ELSE
- 	$scope.Borrar=function(producto){
+  	$scope.Borrar=function(producto){
 		console.log("borrar"+producto);
     $http.post("PHP/nexo.php",{datos:{accion :"borrar",producto:producto}},{headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
          .then(function(respuesta) {       
@@ -249,9 +245,7 @@ console.log( JSON.stringify(producto));
               //aca se ejecuta cuando hay errores
               console.log( response);           
       });
- 	}// $scope.Borrar
-
-
+ 	  }// $scope.Borrar
    $scope.videoSources = [];
         
         $scope.loadVideos = function() {
@@ -262,24 +256,20 @@ console.log( JSON.stringify(producto));
 
 app.controller('controlGrillaFiltro', function($scope, $http,$location,$state,cienDatos) {
     $scope.DatoTest="**grillaFiltro**";
-console.info(cienDatos);
-$scope.ListadoProducto= cienDatos;
-$scope.filtraraPorMoneda= function(valoractual, valoresperado, tercerparametro){
-  if(valoractual.indexOf(valoresperado)===0)
-    {return true;
-    console.info("valores ",valoresperado,valoractual);}
-  else{
-
-
-
-  return false;}
-};//fin filtrarPorMoneda
+    console.info(cienDatos);
+    $scope.ListadoProducto= cienDatos;
+    $scope.filtraraPorMoneda= function(valoractual, valoresperado, tercerparametro){
+      if(valoractual.indexOf(valoresperado)===0)
+        {return true;
+        console.info("valores ",valoresperado,valoractual);}
+      else{
+      return false;}
+    };//fin filtrarPorMoneda
 
 });//app.controller('controlGrillaFiltro',
 
-
-app.controller('controlModificacion', function($scope, $http, $state, $stateParams, FileUploader)//, $routeParams, $location)
-{
+app.controller('controlModificacion', function($scope, $http, $state, $stateParams, FileUploader)
+  {
   $scope.producto={};
   $scope.DatoTest="**Modificar**";
   $scope.uploader = new FileUploader({url: 'PHP/nexo.php'});
@@ -355,30 +345,22 @@ app.service('cargadoDeFoto',function($http,FileUploader){
          });
     }
 });//app.service('cargadoDeFoto',function($http,FileUploader){
- app.factory("factoryProducto",function(servicioUsuario){
-  var producto = {nombre:"German",
-   // servicioUsuario.retornarPersona(),
-    mostrarNombre:function(dato)
-    {  this.nombre= dato;
-      servicioUsuario.retornarProducto().then(function(respuesta){
-        console.log(respuesta);
-      })
-      //console.log("este es mi nombre "+dato)
-      }//fin de mostrarNombre
-   , TraerListado:  function(){ 
-     return servicioUsuario.retornarProducto().then(function(respuesta){
+
+app.factory("factoryProducto",function(servicioProducto){
+  var producto = {
+    TraerListado:  function(){ 
+     return servicioProducto.retornarProducto().then(function(respuesta){
         console.log(respuesta);
         return respuesta ;
-      })
-      //console.log("este es mi nombre "+dato)
+      }) //console.log("este es mi nombre "+dato)
       }//fin de TraerListado
-  };
+  }; //fin producto
   return producto;
- }); 
- app.service('servicioUsuario',function($http){ 
+});//Fin cargadoDeFoto
+
+app.service('servicioProducto',function($http){ 
   //var lista= {
   this.retornarProducto=function(){
-      //var listado = "GermanMolina";
      // return listado;
     return  $http.get('/TP_Pizzeria/Datos/Producto')// el nombre completo de la pagina
     .then(function(respuesta) {       
@@ -389,10 +371,32 @@ app.service('cargadoDeFoto',function($http,FileUploader){
        // console.log( response);     
    });
    };//fin retornarPersona
-
- // };//fin lista
-//return lista;
 });//app.service
+
+app.service('servicioUsuario',function($http){ 
+  //var lista= {
+  this.retornarProducto=function(){
+     // return listado;
+    return  $http.get('/TP_Pizzeria/Datos/Usuario')// el nombre completo de la pagina
+    .then(function(respuesta) {       
+         return  respuesta.data;
+         //console.log(respuesta.data);
+    },function errorCallback(response) {
+        return [];
+       // console.log( response);     
+   });
+   };//fin retornarPersona
+});//app.service
+
+app.service('servicioMjePrincipal',function($http){ 
+ var mensaje ='Desconectado';
+
+  this.CargarMje= function (mje) {
+    this.mensaje=mje;  
+    return true;     
+   }
+   return mensaje; 
+});//app.servicioMjePrincipal
 
 app.service('servicioMjePost',function($http){ 
   //var lista= {

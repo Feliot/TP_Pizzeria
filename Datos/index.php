@@ -32,10 +32,6 @@ $app->get('/', function ($request, $response, $args) {
     $response->write("Welcome to Slim!");
     return $response;
 });
-$app->post('/', function ($request, $response, $args) {
-    $response->write("Welcome to Slim! post");
-    return $response;
-});
 
 $app->get('/hello[/{name}]', function ($request, $response, $args) {
     $response->write("Hello, " . $args['name']);
@@ -44,6 +40,11 @@ $app->get('/hello[/{name}]', function ($request, $response, $args) {
 
 $app->get('/Producto[/]', function ($request, $response, $args) {
 	$listado=Producto::TraerTodosLosProductos();
+    $response->write(json_encode($listado));
+    return $response;
+});
+$app->get('/Usuario[/]', function ($request, $response, $args) {
+	$listado=Usuario::TraerTodosLosUsuarios();
     $response->write(json_encode($listado));
     return $response;
 });
